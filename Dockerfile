@@ -2,7 +2,7 @@
 FROM php:7.4-apache
 
 # Set environment variables
-ENV DEBIAN_FRONTEND noninteractive
+# ENV DEBIAN_FRONTEND noninteractive
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
@@ -28,9 +28,13 @@ COPY . /var/www/html
 # Run Composer to install ProjectSend's PHP dependencies
 RUN composer install
 
-RUN chmod -R 777 /var/www/html/includes/sys.config.sample.php \
-    /var/www/html/upload/files \
-    /var/www/html/upload/temp
+RUN find /var/www/html -type d -exec chmod 775 {} \;
+RUN find /var/www/html -type f -exec chmod 644 {} \;
+
+RUN chmod 777 /var/www/html/includes;
+RUN chmod 777 /var/www/html/upload/files;
+RUN chmod 777 /var/www/html/upload/temp;
+
 
 # Expose port 80 (Apache)
 EXPOSE 80
