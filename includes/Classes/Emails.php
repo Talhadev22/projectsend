@@ -717,6 +717,7 @@ class Emails
     {
         $email_data = $this->getEmailTypeData('new_files_by_user');
         $strings = $email_data['strings'];
+        
         $this->email_body = $this->prepareBody('new_files_by_user');
         $this->email_body = str_replace(
             array('%SUBJECT%', '%BODY1%', '%FILES%', '%BODY2%', '%BODY3%', '%BODY4%', '%URI%'),
@@ -942,6 +943,33 @@ class Emails
         return false;
     }
 
+    function extractEmails($emailList){
+            $emailArray = $emailList;
+            $desiredDomain = 'isomer.group';
+
+            $withDomain = [];
+                $withoutDomain = [];
+
+                foreach ($emailArray as $email) {
+                    $email = $email['email'];
+                    // Use strstr to check if the email contains the desired domain
+                    if (strstr($email, "@" . $desiredDomain)) {
+                        $withDomain[] = $email; // Email with the desired domain
+                    } else {
+                        $withoutDomain[] = $email; // Email without the desired domain
+                    }
+                }
+
+                // $withDomain contains email addresses with the 'isomer.group' domain
+                // $withoutDomain contains email addresses without the 'isomer.group' domain
+                $response = [
+                    'withDomain' => $withDomain,
+                    'withoutDomain' => $withoutDomain,
+                ];
+                return $response;
+                
+    }
+
     /**
      * Finally, try to send the e-mail and return a status, where
      * 1 = Message sent OK
@@ -949,6 +977,7 @@ class Emails
      *
      * Returns custom values instead of a boolean value to allow more
      * codes in the future, on new validations and functions.
+     * 
      */
     public function send($arguments)
     {
@@ -971,7 +1000,6 @@ class Emails
         $this->email_successful = false;
 
         $debug = false;
-
         switch ($this->type) {
             case 'test_settings':
                 $body_variables = [$test_message];
@@ -985,6 +1013,23 @@ class Emails
                 break;
             case 'new_files_by_user':
                 $body_variables = [$this->files_list,];
+               
+                if(
+                    is_array($arguments['email_lists']) 
+                    && count($arguments['email_lists']) > 0
+                ){
+                    
+                    $this->try_bcc = true;
+                    $re = $this->extractEmails($arguments['email_lists']);
+                    
+                    if(isset($re['withDomain']) && is_array($re['withDomain']) && count($re['withDomain'])>0){
+                        $this->upload_cc_to = $re['withDomain'];
+                    }
+                    if(isset($re['withoutDomain']) && is_array($re['withoutDomain']) && count($re['withoutDomain'])>0){
+                        $this->upload_to = $re['withoutDomain'];
+                    }
+                    
+                }
                 if (get_option('mail_copy_user_upload') == '1') {
                     $this->try_bcc = true;
                 }
@@ -1044,7 +1089,7 @@ class Emails
             ),
             $this->mail_info['body']
         );
-
+     
         /**
          * If we are generating a preview, just return the html content
          */
@@ -1142,6 +1187,25 @@ class Emails
                     foreach ($this->add_bcc_to as $this->set_bcc) {
                         $email->AddBCC($this->set_bcc);
                     }
+                }
+                
+                
+            }
+
+            /**
+             * Add Cc for the users.
+             * Who are selected for the upload file
+             */
+            if (!empty($this->upload_cc_to)) {
+                $this->upload_bcc_to = array_unique($this->upload_cc_to);
+                foreach ($this->upload_cc_to as $this->set_upload_cc) {
+                    $email->AddCC($this->set_upload_cc);
+                }
+            }
+            if (!empty($this->upload_to)) {
+                $this->upload_to = array_unique($this->upload_to);
+                foreach ($this->upload_to as $this->set_upload_to) {
+                    $email->AddAddress($this->set_upload_to);
                 }
             }
 

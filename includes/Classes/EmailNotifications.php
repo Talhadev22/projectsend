@@ -32,6 +32,8 @@ class EmailNotifications
         $this->clients_data = [];
         $this->files_data = [];
         $this->creators = [];
+        $this->qw = [];
+        
     }
 
     public function getNotificationsSent()
@@ -55,13 +57,15 @@ class EmailNotifications
             'pending' => [],
             'to_admins' => [],
             'to_clients' => [],
+            'clients_emails' => [],
+            'clients_files' => []
         ];
 
         // Get notifications
         $params = [];
         $query = "SELECT * FROM " . TABLE_NOTIFICATIONS . " WHERE sent_status = '0' AND times_failed < :times";
         $params[':times'] = get_option('notifications_max_tries');
-
+        
         // In case we manually want to send specific notifications
         if (!empty($parameters['notification_id_in'])) {
             $notification_id_in = implode(',', array_map( 'intval', $parameters['notification_id_in'] ));
@@ -81,11 +85,15 @@ class EmailNotifications
             $query .= " LIMIT :limit";
             $params[':limit'] = get_option('notifications_max_emails_at_once');
         }
-
         $statement = $this->dbh->prepare( $query );
         $statement->execute( $params );
         $statement->setFetchMode(PDO::FETCH_ASSOC);
-        while ($row = $statement->fetch()) {
+
+        $arr = [];
+        $fileIds = [];
+        while ($row = $statement->fetch()) {  
+            array_push($arr, $row['client_id']); 
+            array_push($fileIds, $row['file_id']); 
             $notifications['pending'][] = array(
                 'id' => $row['id'],
                 'client_id' => $row['client_id'],
@@ -93,22 +101,24 @@ class EmailNotifications
                 'timestamp' => $row['timestamp'],
                 'uploader_type' => ($row['upload_type'] == '0') ? 'client' : 'user',
             );
-
+            
             // Add the file data to the global array
             if (!array_key_exists($row['file_id'], $this->files_data)) {
                 $file = new \ProjectSend\Classes\Files($row['file_id']);
+               
                 $this->files_data[$file->id] = array(
                     'id'=> $file->id,
                     'filename' => $file->filename_original,
                     'title' => $file->title,
                     'description' => $file->description,
+                    'public_url'=>$file->public_url,
+                    'public'=> $file->isPublic()
                 );
             }
 
             // Add the file data to the global array
             if (!array_key_exists($row['client_id'], $this->clients_data)) {
                 $client = get_client_by_id($row['client_id']);
-
                 if (!empty($client)) {
                     $this->clients_data[$row['client_id']] = $client;
                     $this->mail_by_user[$client['username']] = $client['email'];
@@ -156,13 +166,44 @@ class EmailNotifications
             }
         }
 
+        $userIds = $arr;
+        $emailsArr = [];
+        $filesArr = [];
+        
+        if(!empty($userIds)){
+
+            $users = "SELECT email FROM " . TABLE_USERS . " WHERE id in (".implode(',', $userIds).")";
+            $uq = $this->dbh->prepare( $users );
+            $uq->setFetchMode(PDO::FETCH_ASSOC);
+            $uq->execute();
+            while ($row = $uq->fetch()) { 
+            
+                array_push($notifications['clients_emails'],$row);
+            }
+        }
+
+        if(!empty($fileIds)){
+
+            $ufiles = "SELECT id, original_url, description, filename, public_token, public_allow FROM " . TABLE_FILES . " WHERE id in (".implode(',', $fileIds).")";
+            $uf = $this->dbh->prepare( $ufiles );
+            $uf->setFetchMode(PDO::FETCH_ASSOC);
+            $uf->execute();
+            while ($row = $uf->fetch()) {   
+                array_push($notifications['clients_files'],$row);
+    
+            }
+        }
+        
+        
+        //$notifications['clientEmail'] = array_merge($notifications['clientEmail'], $this->emailsArr);
+        // echo '<pre>';
+        // print_r($notifications);
         return $notifications;
     }
 
     public function sendNotifications()
     {
         $notifications = $this->getPendingNotificationsFromDatabase();
-
         if (empty($notifications['pending'])) {
             $return = [
                 'status' => 'success',
@@ -176,7 +217,7 @@ class EmailNotifications
         $this->sendNotificationsToAdmins($notifications['to_admins']);
 
         // Send the emails to CLIENTS
-        $this->sendNotificationsToClients($notifications['to_clients']);
+        $this->sendNotificationsToClients($notifications['to_clients'], $notifications['clients_emails'], $notifications['clients_files']);
         
         // Update the database
         $this->updateDatabaseNotificationsSent($this->notifications_sent);
@@ -240,13 +281,13 @@ class EmailNotifications
         }
     }
 
-    private function sendNotificationsToClients($notifications = [])
+    private function sendNotificationsToClients($notifications = [], $emails, $ClientFiles)
     {
         if (!empty($notifications)) {
             $processed_notifications = [];
 
             foreach ($notifications as $mail_username => $files) {
-                $files_list_html = $this->makeFilesListHtml($files);
+                $files_list_html = $this->makeFilesListHtml($ClientFiles);
 
                 // Add each notification to an array
                 foreach ($files as $file) {
@@ -259,6 +300,9 @@ class EmailNotifications
                     'type' => 'new_files_by_user',
                     'address' => $this->mail_by_user[$mail_username],
                     'files_list' => $files_list_html,
+                    //'email_lists' => ['1@yopmail.com', '2@yopmail.com', '3@yopmail.com', 'saad123@isomer.group', 'saad123@isomer.group'],
+                     'email_lists' => $emails,
+                     'clients_files' => $ClientFiles,
                 ])) {
                     $this->notifications_sent = array_merge($this->notifications_sent, $processed_notifications);
                 }
@@ -275,14 +319,20 @@ class EmailNotifications
     private function makeFilesListHtml($files, $uploader_username = null)
     {
         $html = '';
-
         if (!empty($uploader_username)) {
             $html .= '<li style="font-size:15px; font-weight:bold; margin-bottom:5px;">'.$uploader_username.'</li>';
         }
         foreach ($files as $file) {
-            $file_data = $this->files_data[$file['file_id']];
+           
+            $file_data = $this->files_data[$file['id']];
             $html .= '<li style="margin-bottom:11px;">';
-            $html .= '<p style="font-weight:bold; margin:0 0 5px 0; font-size:14px;">'.$file_data['title'].'<br>('.$file_data['filename'].')</p>';
+            if($file_data['public'] == true){
+            
+            $html .= '<p style="font-weight:bold; margin:0 0 5px 0; font-size:14px;"><a href="'.$file_data['public_url'].'">'.$file_data['title'].'<br>('.$file_data['filename'].')</a></p>';
+            } else {
+                $html .= '<p style="font-weight:bold; margin:0 0 5px 0; font-size:14px;">'.$file_data['filename'].'</p>';
+                
+            }
             if (!empty($file_data['description'])) {
                 if (strpos($file_data['description'], '<p>') !== false) {
                     $html .= $file_data['description'];

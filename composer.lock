@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02d0169019c0d6fbe6c2f16e65d659c1",
+    "content-hash": "473a23ac1ac2f121a2086c705fcb63a2",
     "packages": [
         {
             "name": "claviska/simpleimage",
-            "version": "3.6.5",
+            "version": "3.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/claviska/SimpleImage.git",
-                "reference": "00f90662686696b9b7157dbb176183aabe89700f"
+                "reference": "82dbef988e356baa5d73993a1351bcb6c0959269"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/00f90662686696b9b7157dbb176183aabe89700f",
-                "reference": "00f90662686696b9b7157dbb176183aabe89700f",
+                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/82dbef988e356baa5d73993a1351bcb6c0959269",
+                "reference": "82dbef988e356baa5d73993a1351bcb6c0959269",
                 "shasum": ""
             },
             "require": {
@@ -43,35 +43,31 @@
                 }
             ],
             "description": "A PHP class that makes working with images as simple as possible.",
-            "support": {
-                "issues": "https://github.com/claviska/SimpleImage/issues",
-                "source": "https://github.com/claviska/SimpleImage/tree/3.6.5"
-            },
             "funding": [
                 {
                     "url": "https://github.com/claviska",
                     "type": "github"
                 }
             ],
-            "time": "2021-12-01T12:42:55+00:00"
+            "time": "2022-12-12T14:31:53+00:00"
         },
         {
             "name": "cocur/slugify",
-            "version": "v4.2.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cocur/slugify.git",
-                "reference": "7e7d03067d1075b1147090b3e1df672dfffb9dc3"
+                "reference": "4c6ed14a087ca061b220ffda640c07644946e2a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/7e7d03067d1075b1147090b3e1df672dfffb9dc3",
-                "reference": "7e7d03067d1075b1147090b3e1df672dfffb9dc3",
+                "url": "https://api.github.com/repos/cocur/slugify/zipball/4c6ed14a087ca061b220ffda640c07644946e2a0",
+                "reference": "4c6ed14a087ca061b220ffda640c07644946e2a0",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": "^7.1 || ~8.0.0 || ~8.1.0"
+                "php": "^7.1 || ~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "conflict": {
                 "symfony/config": "<3.4 || >=4,<4.3",
@@ -123,11 +119,7 @@
                 "slug",
                 "slugify"
             ],
-            "support": {
-                "issues": "https://github.com/cocur/slugify/issues",
-                "source": "https://github.com/cocur/slugify/tree/v4.2.0"
-            },
-            "time": "2022-08-13T15:23:32+00:00"
+            "time": "2023-08-05T09:42:11+00:00"
         },
         {
             "name": "enshrined/svg-sanitize",
@@ -168,24 +160,20 @@
                 }
             ],
             "description": "An SVG sanitizer for PHP",
-            "support": {
-                "issues": "https://github.com/darylldoyle/svg-sanitizer/issues",
-                "source": "https://github.com/darylldoyle/svg-sanitizer/tree/0.15.4"
-            },
             "time": "2022-02-21T09:13:59+00:00"
         },
         {
             "name": "hybridauth/hybridauth",
-            "version": "v3.8.0",
+            "version": "v3.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hybridauth/hybridauth.git",
-                "reference": "c76bea6638376394c74a52791dd637fef4deaf08"
+                "reference": "9b5e8a7782b630d5b1151003999d6db91a863ffe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/c76bea6638376394c74a52791dd637fef4deaf08",
-                "reference": "c76bea6638376394c74a52791dd637fef4deaf08",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/9b5e8a7782b630d5b1151003999d6db91a863ffe",
+                "reference": "9b5e8a7782b630d5b1151003999d6db91a863ffe",
                 "shasum": ""
             },
             "require": {
@@ -229,12 +217,7 @@
                 "social",
                 "twitter"
             ],
-            "support": {
-                "gitter": "https://gitter.im/hybridauth/hybridauth",
-                "issues": "https://github.com/hybridauth/hybridauth/issues",
-                "source": "https://github.com/hybridauth/hybridauth/tree/v3.8.0"
-            },
-            "time": "2022-04-08T09:49:25+00:00"
+            "time": "2023-07-25T15:02:07+00:00"
         },
         {
             "name": "league/color-extractor",
@@ -288,10 +271,6 @@
                 "image",
                 "palette"
             ],
-            "support": {
-                "issues": "https://github.com/thephpleague/color-extractor/issues",
-                "source": "https://github.com/thephpleague/color-extractor/tree/master"
-            },
             "time": "2016-12-15T09:30:02+00:00"
         },
         {
@@ -328,10 +307,6 @@
                 "multi-runtime",
                 "plupload"
             ],
-            "support": {
-                "issues": "https://github.com/moxiecode/plupload/issues",
-                "source": "https://github.com/moxiecode/plupload/tree/v3.1.5"
-            },
             "time": "2021-11-15T09:43:12+00:00"
         },
         {
@@ -381,25 +356,20 @@
                 "pseudorandom",
                 "random"
             ],
-            "support": {
-                "email": "info@paragonie.com",
-                "issues": "https://github.com/paragonie/random_compat/issues",
-                "source": "https://github.com/paragonie/random_compat"
-            },
             "time": "2022-02-16T17:07:03+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
-            "version": "v6.6.0",
+            "version": "v6.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "e43bac82edc26ca04b36143a48bde1c051cfd5b1"
+                "reference": "e88da8d679acc3824ff231fdc553565b802ac016"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e43bac82edc26ca04b36143a48bde1c051cfd5b1",
-                "reference": "e43bac82edc26ca04b36143a48bde1c051cfd5b1",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e88da8d679acc3824ff231fdc553565b802ac016",
+                "reference": "e88da8d679acc3824ff231fdc553565b802ac016",
                 "shasum": ""
             },
             "require": {
@@ -409,22 +379,24 @@
                 "php": ">=5.5.0"
             },
             "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "doctrine/annotations": "^1.2",
-                "php-parallel-lint/php-console-highlighter": "^0.5.0",
-                "php-parallel-lint/php-parallel-lint": "^1.3.1",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                "doctrine/annotations": "^1.2.6 || ^1.13.3",
+                "php-parallel-lint/php-console-highlighter": "^1.0.0",
+                "php-parallel-lint/php-parallel-lint": "^1.3.2",
                 "phpcompatibility/php-compatibility": "^9.3.5",
                 "roave/security-advisories": "dev-latest",
-                "squizlabs/php_codesniffer": "^3.6.2",
-                "yoast/phpunit-polyfills": "^1.0.0"
+                "squizlabs/php_codesniffer": "^3.7.2",
+                "yoast/phpunit-polyfills": "^1.0.4"
             },
             "suggest": {
                 "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
+                "ext-openssl": "Needed for secure SMTP sending and DKIM signing",
+                "greew/oauth2-azure-provider": "Needed for Microsoft Azure XOAUTH2 authentication",
                 "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
                 "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
                 "psr/log": "For optional PSR-3 debug logging",
-                "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
-                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
+                "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)",
+                "thenetworg/oauth2-azure": "Needed for Microsoft XOAUTH2 authentication"
             },
             "type": "library",
             "autoload": {
@@ -454,17 +426,13 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "support": {
-                "issues": "https://github.com/PHPMailer/PHPMailer/issues",
-                "source": "https://github.com/PHPMailer/PHPMailer/tree/v6.6.0"
-            },
             "funding": [
                 {
                     "url": "https://github.com/Synchro",
                     "type": "github"
                 }
             ],
-            "time": "2022-02-28T15:31:21+00:00"
+            "time": "2023-08-29T08:26:30+00:00"
         },
         {
             "name": "tamtamchik/simple-flash",
@@ -523,10 +491,6 @@
                 "messages",
                 "notifications"
             ],
-            "support": {
-                "issues": "https://github.com/tamtamchik/simple-flash/issues",
-                "source": "https://github.com/tamtamchik/simple-flash/tree/2.0.1"
-            },
             "time": "2020-12-28T10:04:47+00:00"
         }
     ],
@@ -537,8 +501,11 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-exif": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "1.1.0"
 }
