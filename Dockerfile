@@ -26,7 +26,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Run Composer to install ProjectSend's PHP dependencies
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 RUN find /var/www/html -type d -exec chmod 775 {} \;
 RUN find /var/www/html -type f -exec chmod 644 {} \;
