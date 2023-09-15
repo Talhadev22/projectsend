@@ -5,10 +5,10 @@ npm/node_modules
 bower_components
 
 # Compiled files
-assets/dist
-assets/css
-assets/fonts
-assets/js
+# assets/dist
+# assets/css
+# assets/fonts
+# assets/js
 
 # Cache
 cache/*
